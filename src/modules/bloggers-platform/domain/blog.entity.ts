@@ -19,7 +19,7 @@ export class Blog {
     
     createdAt!: Date
     
-    @Prop({type: Boolean, required: true})
+    @Prop({type: Boolean, required: true, default: false})
     isMembership!:boolean
     
     @Prop({ type: Date, default: null })
