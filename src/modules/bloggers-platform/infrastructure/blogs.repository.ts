@@ -2,6 +2,7 @@ import {Injectable, NotFoundException} from '@nestjs/common';
 import {Blog} from '../domain/blog.entity';
 import type { BlogDocument, BlogModelType } from '../domain/blog.entity';
 import {InjectModel} from '@nestjs/mongoose';
+import {UpdatePostDto} from '../dto/create-post.dto';
 
 @Injectable()
 export class BlogsRepository {

@@ -1,9 +1,9 @@
-import {Body, Controller, Get, Param, Post, Put, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query} from '@nestjs/common';
 import {GetUsersQueryParams} from '../../user-accounts/api/input-dto/get-users-query-params.input-dto';
 import {PaginatedViewDto} from '../../../core/dto/base.paginated.view-dto';
 import {UserViewDto} from '../../user-accounts/api/view-dto/users.view-dto';
 import {BlogsQueryRepository} from '../infrastructure/blogs.query-repository';
-import {BlogsService} from '../blogs.service';
+import {BlogsService} from '../application/blogs.service';
 import {GetBlogsQueryParams} from './input-dto/get-blogs-query-params.input-dto';
 import {BlogsViewDto} from './view-dto/blogs.view-dto';
 import {CreateBlogDomainDto} from '../domain/dto/create-blog.domain.dto';
@@ -48,5 +48,11 @@ export class BlogsController {
         return this.blogQueryRepository.getByIdOrNotFoundFail(userId);
     }
     
+    @ApiParam({ name: 'id' })
+    @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async deleteBlog(@Param('id') id: string): Promise<void> {
+        return this.blogService.deleteBlog(id);
+    }
     
 }
