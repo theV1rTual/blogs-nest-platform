@@ -1,16 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { UsersExternalQueryRepository } from '../user-accounts/infrastructure/external-query/users.external-query-repository';
-import { UsersExternalService } from '../user-accounts/application/users.external-service';
+import {InjectModel} from '@nestjs/mongoose';
+import {Blog} from './domain/blog.entity';
+import type {BlogModelType} from './domain/blog.entity';
+import {BlogsRepository} from './infrastructure/blogs.repository';
+import {CreateBlogDto, UpdateBlogDto} from './dto/create-blog.dto';
+import type {UpdateUserDto} from '../user-accounts/dto/create-user.dto';
 
 @Injectable()
 export class BlogsService {
   constructor(
-    private usersExternalRepository: UsersExternalQueryRepository,
-    private usersExternalService: UsersExternalService,
+    @InjectModel(Blog.name)
+    private BlogModel: BlogModelType,
+    private blogsRepository: BlogsRepository
   ) {}
-  async hello(id: string) {
-    await this.usersExternalRepository.getByIdOrNotFoundFail(id);
-
-    return 'Hello World!';
+  async createBlog(dto: CreateBlogDto): Promise<string> {
+      const blog = this.BlogModel.createInstance({
+          name: dto.name,
+          websiteUrl: dto.websiteUrl,
+          description: dto.description
+      })
+      
+      await this.blogsRepository.save(blog)
+      
+      return blog._id.toString()
   }
+    
+    async updateBlog(id: string, dto: UpdateBlogDto): Promise<string> {
+        const blog = await this.blogsRepository.findOrNotFoundFail(id);
+        blog.update(dto);
+        
+        await this.blogsRepository.save(blog);
+        
+        return blog._id.toString();
+    }
+  
+  
 }

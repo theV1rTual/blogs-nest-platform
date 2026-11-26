@@ -29,7 +29,6 @@ export class UsersController {
   @ApiParam({ name: 'id' })
   @Get(':id')
   async getById(@Param('id') id: string): Promise<UserViewDto> {
-    console.log('123');
     return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
 
