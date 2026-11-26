@@ -28,6 +28,10 @@
 
 ## Installation
 
+Use Node.js 24.15 or newer in the 24.x release line. With nvm, run
+`nvm install` and `nvm use` to select the version pinned in `.nvmrc`.
+Set the Vercel project's Node.js version to 24.x as well.
+
 ```bash
 $ npm install
 ```
