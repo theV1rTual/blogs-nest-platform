@@ -1,14 +1,31 @@
 import { Module } from '@nestjs/common';
-import { UserAccountsController } from './api/user-accounts.controller';
-import { UserAccountsService } from './application/user-accounts.service';
+import { UsersController } from './api/users.controller';
+import { UsersService } from './application/users.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from './domain/user.entity';
+import { UsersRepository } from './infrastructure/users.repository';
+import { UsersQueryRepository } from './infrastructure/query/users.query-repository';
+import { AuthController } from './api/auth.controller';
+import { SecurityDevicesQueryRepository } from './infrastructure/query/security-devices.query-repository';
+import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
+import { SecurityDevicesController } from './api/security-devices.controller';
+import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
+import { UsersExternalService } from './application/users.external-service';
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    ],
-    controllers: [UsersController],
-    providers: [UsersService, UsersRepository, UsersQueryRepository, UsersExternalRepository,
-        UsersExternalService,],
-    exports: [UsersExternalRepository, UsersExternalService], //тут указываем какие провайдеры будут доступны в другом модуле в случае импорта
+  imports: [
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+  ],
+  controllers: [UsersController, AuthController, SecurityDevicesController],
+  providers: [
+    UsersService,
+    UsersRepository,
+    UsersQueryRepository,
+    SecurityDevicesQueryRepository,
+    AuthQueryRepository,
+    UsersExternalQueryRepository,
+    UsersExternalService,
+  ],
+  exports: [UsersExternalQueryRepository, UsersExternalService],
 })
 export class UserAccountsModule {}

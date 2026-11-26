@@ -38,6 +38,33 @@ $ npm install
 
 ## Running the app
 
+Copy `.env.example` to `.env`, then start local MongoDB with
+`docker compose up -d`. Stop it with `docker compose down`; its data stays
+in the named volume. MongoDB is exposed only on the local machine.
+
+The application uses `PORT` from the environment, or port `5005` by default.
+API routes have the `/api` prefix. Swagger UI is available at `/api`, and
+the OpenAPI document at `/api-json`.
+
+Shared DTOs live in `src/core/dto`; global application settings live in
+`src/setup`. These parts follow the
+[course reference](https://github.com/it-incubator/ed-back-lessons-bloggers-nest/tree/main/src)
+and are adapted for this project's NestJS 12 and TypeScript settings.
+
+All modules from reference commit `f418ffe` are included. User CRUD is
+available at `/api/users`, including pagination, sorting, search, email
+updates and soft deletion. Auth and security-device controllers and the
+blogger service remain lesson scaffolds, as in the reference.
+
+The database reset endpoint `DELETE /api/testing/all-data` is available
+only when `ENABLE_TESTING_API=true` and `NODE_ENV` is not `production`.
+Leave it disabled on hosted environments.
+
+E2E tests need a running MongoDB. Set `TEST_MONGODB_URI` to select a test
+server; the default is `mongodb://127.0.0.1:27017`. Every run creates and
+removes its own uniquely named database, leaving the application database
+untouched.
+
 ```bash
 # development
 $ npm run start
