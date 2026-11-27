@@ -15,6 +15,12 @@ export class PostsRepository {
         })
     }
     
+    async findByBlogId(id: string): Promise<PostDocument[]> {
+        return this.PostModel.find({
+            blogId: id
+        })
+    }
+    
     async save(post: PostDocument) {
         await post.save();
     }

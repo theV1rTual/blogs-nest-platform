@@ -8,13 +8,17 @@ import {GetPostsQueryParams} from './input-dto/get-posts-query-params.input-dto'
 import {PostsService} from '../application/posts.service';
 import {CreatePostDto} from '../dto/create-post.dto';
 import {UpdatePostsQueryDto} from './input-dto/update-posts-query-params.input-dto';
+import {CommentsQueryRepository} from '../infrastructure/comments.query-repository';
+import {CommentsViewDto} from './view-dto/comments.view-dto';
+import {GetCommentsQueryParams} from './input-dto/get-comments-query-params.input-dto';
 
 @Controller('posts')
 export class PostsController {
     constructor(
         private postRepository: PostsRepository,
         private postQueryRepository: PostsQueryRepository,
-        private postsService: PostsService
+        private postsService: PostsService,
+        private commentsQueryRepository: CommentsQueryRepository,
     ) {}
     
     @ApiParam({ name: 'id' })
@@ -28,6 +32,15 @@ export class PostsController {
         @Query() query: GetPostsQueryParams,
     ): Promise<PaginatedViewDto<PostsViewDto[]>> {
         return this.postQueryRepository.getAll(query);
+    }
+
+    @ApiParam({ name: 'postId' })
+    @Get(':postId/comments')
+    getCommentsByPostId(
+        @Param('postId') postId: string,
+        @Query() query: GetCommentsQueryParams,
+    ): Promise<PaginatedViewDto<CommentsViewDto[]>> {
+        return this.commentsQueryRepository.getByPostId(postId, query);
     }
     
     @Post()

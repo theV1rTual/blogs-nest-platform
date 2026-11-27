@@ -41,8 +41,8 @@ export class PostsService {
             blogId: blog._id,
             blogName: blog.name,
         })
-        await this.blogsRepository.save(blog);
-        return blog._id.toString();
+        await this.postRepository.save(post);
+        return post._id.toString();
     }
     
     async deletePost(id: string) {
